@@ -1,0 +1,68 @@
+<html>
+  <link
+    href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+    rel="stylesheet"
+  />
+  <head>
+    <style>
+      body {
+        text-align: center;
+      }
+    </style>
+  </head>
+</html>
+<body>
+  <h1 class="text-7xl pb-4">Merry Christmas!</h1>
+  <h2 class="text-5xl pb-2" id="time-to-event"></h2>
+  <button
+    type="button"
+    class="rounded-full bg-red-600 text-white p-4"
+    id="show-me"
+    disabled
+    type="button"
+  >
+    Show me my present
+  </button>
+  <div id="gift" style="display: none">
+    <img alt="" src="./taf.png" />
+  </div>
+  <script>
+    const timerEl = document.querySelector("#time-to-event");
+    const gift = document.querySelector("#gift");
+    const button = document.querySelector("#show-me");
+    button.onclick = () => {
+      gift.style.display = "block";
+    };
+    const countdown = setInterval(updateTime, 1000);
+    function updateTime() {
+      const secondsToEvent = (new Date("2020-12-11 17:00") - Date.now()) / 1000;
+      const timeToEvent = [24 * 3600, 3600, 60, 1].reduce(
+        (acc, period) => {
+          acc.value.push(Math.floor(acc.remainder / period));
+          acc.remainder =
+            acc.remainder - acc.value[acc.value.length - 1] * period;
+          return acc;
+        },
+        { value: [], remainder: secondsToEvent }
+      );
+
+      const formattedTimeToEvent = ["Day", "Hour", "Minute", "Second"]
+        .reduce((acc, period, index) => {
+          const periodValue = timeToEvent.value[index];
+          if (periodValue) {
+            acc.push(`${periodValue} ${period}${periodValue > 1 ? "s" : ""}`);
+          }
+          return acc;
+        }, [])
+        .join(" ");
+
+      timerEl.textContent = formattedTimeToEvent;
+
+      if (secondsToEvent <= 0) {
+        button.removeAttribute("disabled");
+        clearInterval(countdown);
+        timerEl.textContent = "";
+      }
+    }
+  </script>
+</body>
