@@ -349,7 +349,7 @@
     const largeImage = document.querySelector(".large-image");
 
     cardImage.onclick = (e) => {
-      const secondsToEvent = (new Date("2020-12-11 17:00") - Date.now()) / 1000;
+      const secondsToEvent = (new Date("2020-12-11T17:00") - Date.now()) / 1000;
       if (secondsToEvent > 0) {
         return;
       }
@@ -363,7 +363,8 @@
     };
 
     function updateTime() {
-      const secondsToEvent = (new Date("2020-12-11 17:00") - Date.now()) / 1000;
+      const secondsToEvent = (new Date("2020-12-11T17:00") - Date.now()) / 1000;
+      console.log("seconds to event", secondsToEvent);
       const timeToEvent = [24 * 3600, 3600, 60, 1].reduce(
         (acc, period) => {
           acc.value.push(Math.floor(acc.remainder / period));
