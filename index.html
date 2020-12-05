@@ -1,39 +1,333 @@
 <html>
-  <link
-    href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
-    rel="stylesheet"
-  />
   <head>
     <style>
       body {
         text-align: center;
+        font-family: sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: lightpink;
+      }
+
+      h1,
+      h2 {
+        color: red;
+      }
+
+      .cards {
+        padding-top: 20px;
+      }
+
+      .card-toggle {
+        display: none;
+      }
+
+      .card {
+        display: block;
+        width: 400px;
+        height: 500px;
+        position: relative;
+        perspective: 2000px;
+        margin: 30px auto;
+        cursor: pointer;
+      }
+
+      .card:hover .face {
+        transition: all 0.3s ease-out;
+      }
+
+      .face {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transition: all 0.5s ease-out;
+        transform-origin: 0 0;
+        background-color: green;
+      }
+
+      .front {
+        transform: rotateY(-20deg);
+        backface-visibility: hidden;
+        z-index: 3;
+      }
+
+      .inner-left {
+        transform: rotateY(-20deg);
+        z-index: 2;
+        background-color: lightgray;
+      }
+
+      .inner-left > img {
+        transform: rotateY(180deg);
+      }
+
+      .inner-right {
+        transform: rotateY(0deg);
+        z-index: 1;
+        background-color: green;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .card:hover .front,
+      .card:hover .inner-left {
+        transform: rotateY(-35deg);
+      }
+
+      .card-toggle:checked + .card .front,
+      .card-toggle:checked + .card .inner-left {
+        transform: rotateY(-165deg);
+      }
+
+      .card-toggle:checked + .card .inner-right {
+        transform: rotateY(-15deg);
+      }
+
+      .card-toggle:checked + .card .santa {
+        display: none;
+      }
+
+      :root {
+        --costume-color: #f91047;
+      }
+
+      .santa {
+        background-color: green;
+        transform: scale(0.5);
+        margin-top: -300px;
+        margin-left: -35px;
+      }
+
+      .body {
+        font-size: 70vw;
+        color: var(--costume-color);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 1em;
+        height: 1em;
+        background-color: currentColor;
+        box-shadow: inset 0 -0.25em rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+        transform-origin: center bottom;
+        animation: balance alternate infinite 2s ease-in-out;
+      }
+
+      @media (min-width: 600px) {
+        .body {
+          font-size: 30vw;
+        }
+      }
+
+      .head {
+        font-size: 0.4em;
+        width: 1em;
+        height: 1.9em;
+        background-color: white;
+        border-radius: 0.5em;
+        transform: translateY(-1em);
+        position: relative;
+      }
+
+      .head::before {
+        content: "";
+        width: 1em;
+        height: 0.375em;
+        display: block;
+        background-color: #ff9876;
+        position: absolute;
+        left: 0;
+        top: 0.65em;
+      }
+
+      .ear {
+        background-color: #fc8363;
+        width: 0.1em;
+        height: 0.3em;
+        position: absolute;
+        top: 0.75em;
+      }
+
+      .ear:nth-of-type(1) {
+        border-radius: 0.05em 0 0 0.05em;
+        left: -0.1em;
+      }
+
+      .ear:nth-of-type(2) {
+        border-radius: 0 0.05em 0.05em 0;
+        right: -0.1em;
+      }
+
+      .hat {
+        content: "";
+        width: 1em;
+        height: 0.15em;
+        position: absolute;
+        transform: scale(1.1);
+        top: 0.5em;
+        left: 0;
+        background-color: white;
+      }
+
+      .hat::before {
+        content: "";
+        display: block;
+        width: 1em;
+        height: 0.5em;
+        background: var(--costume-color);
+        border-radius: 0.5em 0.5em 0 0;
+        z-index: 2;
+        position: absolute;
+        top: -0.5em;
+      }
+
+      .hat::after {
+        /* pompom */
+        content: "";
+        width: 0.25em;
+        height: 0.25em;
+        display: block;
+        background-color: white;
+        border-radius: 50%;
+        position: absolute;
+        z-index: 0;
+        top: -0.72em;
+        right: 0;
+        box-shadow: -0.2em 0.2em 0 0.12em rgba(0, 0, 0, 0.2),
+          -0.2em 0.2em 0 0.12em var(--costume-color);
+      }
+
+      .eye {
+        width: 0.12em;
+        height: 0.12em;
+        background-color: black;
+        border-radius: 50%;
+        position: absolute;
+        top: 0.76em;
+        left: 0.2em;
+      }
+
+      .eye + .eye {
+        left: auto;
+        right: 0.2em;
+      }
+
+      .nose {
+        width: 0.12em;
+        height: 0.22em;
+        background-color: #f24c4c;
+        border-radius: 0 0 0.12em 0.12em;
+        position: absolute;
+        top: 0.84em;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .mouth {
+        width: 0.18em;
+        height: 0.1em;
+        border-bottom-right-radius: 5vw;
+        border-bottom-left-radius: 5vw;
+        margin-top: 0.3em;
+        background-color: black;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        animation: hohoho 4s linear forwards infinite;
+      }
+
+      @keyframes hohoho {
+        0%,
+        10%,
+        20%,
+        40%,
+        100% {
+          /* smiling */
+          width: 0.18em;
+          height: 0.1em;
+          border-bottom-right-radius: 1vw;
+          border-bottom-left-radius: 1vw;
+        }
+
+        5%,
+        15%,
+        25%,
+        35% {
+          /* hohoho */
+          width: 0.15em;
+          height: 0.2em;
+          border-radius: 50%;
+        }
+      }
+
+      @keyframes balance {
+        from {
+          transform: rotate(-2deg);
+        }
+        to {
+          transform: rotate(2deg);
+        }
       }
     </style>
   </head>
 </html>
 <body>
-  <h1 class="text-7xl pb-4">Merry Christmas!</h1>
-  <h2 class="text-5xl pb-2" id="time-to-event"></h2>
-  <button
-    type="button"
-    class="rounded-full bg-red-600 text-white p-4"
-    id="show-me"
-    disabled
-    type="button"
-  >
-    Show me my present
-  </button>
-  <div id="gift" style="display: none">
-    <img alt="" src="./taf.png" />
+  <div class="page">
+    <h1>Reveal your Secret Santa gift in:</h1>
+    <h2 id="time-to-event"></h2>
+    <div class="cards">
+      <input
+        disabled="disabled"
+        type="checkbox"
+        id="card-toggle-1"
+        class="card-toggle"
+        value="selected"
+      />
+      <label class="card" for="card-toggle-1">
+        <div class="front face">
+          <svg viewBox="0 0 500 500">
+            <path
+              fill="green"
+              id="curve"
+              d="M73.2,148.6c4-6.1,65.5-96.8,178.6-95.6c111.3,1.2,170.8,90.3,175.1,97"
+            />
+            <text width="500">
+              <textPath xlink:href="#curve" font-size="3.5em" fill="white">
+                Merry Christmas!
+              </textPath>
+            </text>
+          </svg>
+          <div class="santa">
+            <div class="body">
+              <div class="head">
+                <div class="ear"></div>
+                <div class="ear"></div>
+                <div class="hat"></div>
+                <div class="eye"></div>
+                <div class="eye"></div>
+                <div class="nose"></div>
+                <div class="mouth"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="inner-left face"></div>
+        <div class="inner-right face">
+          <img width="90%" alt="" src="./taf.png" />
+        </div>
+      </label>
+    </div>
   </div>
   <script>
     const timerEl = document.querySelector("#time-to-event");
-    const gift = document.querySelector("#gift");
-    const button = document.querySelector("#show-me");
-    button.onclick = () => {
-      gift.style.display = "block";
-    };
+    const input = document.querySelector(".card-toggle");
     const countdown = setInterval(updateTime, 1000);
+
     function updateTime() {
       const secondsToEvent = (new Date("2020-12-11 17:00") - Date.now()) / 1000;
       const timeToEvent = [24 * 3600, 3600, 60, 1].reduce(
@@ -49,9 +343,11 @@
       const formattedTimeToEvent = ["Day", "Hour", "Minute", "Second"]
         .reduce((acc, period, index) => {
           const periodValue = timeToEvent.value[index];
-          if (periodValue) {
-            acc.push(`${periodValue} ${period}${periodValue > 1 ? "s" : ""}`);
-          }
+          acc.push(
+            `${periodValue} ${period}${
+              periodValue > 1 || periodValue === 0 ? "s" : ""
+            }`
+          );
           return acc;
         }, [])
         .join(" ");
@@ -59,7 +355,7 @@
       timerEl.textContent = formattedTimeToEvent;
 
       if (secondsToEvent <= 0) {
-        button.removeAttribute("disabled");
+        input.removeAttribute("disabled");
         clearInterval(countdown);
         timerEl.textContent = "";
       }
