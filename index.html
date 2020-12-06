@@ -7,12 +7,16 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: lightpink;
+        background: linear-gradient(black, #191970);
+        overflow-y: hidden;
       }
 
+      h1 {
+        font-size: 48px;
+      }
       h1,
       h2 {
-        color: red;
+        color: #ffd700;
       }
 
       .large-image {
@@ -83,6 +87,8 @@
         transform: rotateY(0deg);
         z-index: 1;
         background-color: green;
+        background-color: red;
+        background-color: var(--costume-color);
         display: flex;
         justify-content: center;
         align-items: center;
@@ -104,6 +110,14 @@
 
       .card-toggle:checked + .card .santa {
         display: none;
+      }
+
+      .card-toggle + .card img {
+        pointer-events: none;
+      }
+
+      .card-toggle:checked + .card img {
+        pointer-events: auto;
       }
 
       :root {
@@ -291,7 +305,7 @@
     <h2 id="time-to-event"></h2>
     <div class="cards">
       <input
-        disabled
+        disabled="disabled"
         type="checkbox"
         id="card-toggle-1"
         class="card-toggle"
@@ -343,10 +357,6 @@
     const largeImage = document.querySelector(".large-image");
 
     cardImage.onclick = (e) => {
-      const secondsToEvent = (new Date("2020-12-11T17:00") - Date.now()) / 1000;
-      if (secondsToEvent > 0) {
-        return;
-      }
       e.stopPropagation();
       e.preventDefault();
       largeImage.classList.add("show");
@@ -357,8 +367,8 @@
     };
 
     function updateTime() {
-      const secondsToEvent = (new Date("2020-12-11T17:00") - Date.now()) / 1000;
-      console.log("seconds to event", secondsToEvent);
+      const secondsToEvent = (new Date("2020-12-11T15:00") - Date.now()) / 1000;
+
       const timeToEvent = [24 * 3600, 3600, 60, 1].reduce(
         (acc, period) => {
           acc.value.push(Math.floor(acc.remainder / period));
